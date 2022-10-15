@@ -88,7 +88,7 @@ const AUTO_CLICKERS = {
 
 const getAutoClickerPrice = () =>  {
     let x = AUTO_CLICKERS.get()
-    return (x > 0) ? x * x * 200 : 50;
+    return (x > 0) ? x * 55 : 50;
 }
 
 
