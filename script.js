@@ -41,7 +41,7 @@ click_button.addEventListener("click",() => {
 auto_clicker_buy.addEventListener("click", () => {
     if(CLICKS.get() - getAutoClickerPrice() >= 0) {
         CLICKS.set(CLICKS.get() - getAutoClickerPrice())
-        AUTO_CLICKERS.set(AUTO_CLICKERS.get() + 1)
+        AUTO_CLICKERS.increase()
         auto_clickers.innerHTML = `${AUTO_CLICKERS.get()} AutoClickers`
         clicks.innerHTML = `${CLICKS.get()} Clicks`
         auto_clicker_cost.innerHTML = `AutoClicker Cost: ${getAutoClickerPrice()} Clicks`
@@ -52,11 +52,36 @@ auto_clicker_buy.addEventListener("click", () => {
 
 const AUTO_CLICKERS = {
     get: () => {
-        x = localStorage.getItem("GAME.auto_clickers")
-        return  x ? parseInt(x) : 0;
+        let x = localStorage.getItem("GAME.auto_clickers")
+        return  x ? JSON.parse(x).length : 0;
     },
-    set: (x) => {
-        localStorage.setItem("GAME.auto_clickers", x)
+    increase: () => {
+        let x = localStorage.getItem("GAME.auto_clickers")
+        if(x) {
+            x = JSON.parse(x)
+            x.push(new Date())
+        } else {
+            x = [new Date()] 
+        }
+        localStorage.setItem("GAME.auto_clickers", JSON.stringify(x))
+
+
+    },
+    click: () => {
+        let x = localStorage.getItem("GAME.auto_clickers")
+        if(!x) {x=[]}else{
+        x = JSON.parse(x)}
+        for(let i=0; i<x.length; i++) {
+            let item = x[i].toString()
+            let b = Date.parse(item)
+            console.log(b)
+            let elapsed_time = Math.round((new Date() - b) / 1000)
+            console.log(elapsed_time)
+            CLICKS.set(CLICKS.get() + elapsed_time)
+            x[i] = new Date()
+        }
+        localStorage.setItem("GAME.auto_clickers", JSON.stringify(x))
+
     }
 }
 
@@ -71,7 +96,7 @@ const getAutoClickerPrice = () =>  {
 
 const gameLoop = () => {
 
-    CLICKS.set(CLICKS.get() + AUTO_CLICKERS.get())
+    AUTO_CLICKERS.click()
     clicks.innerHTML = `${CLICKS.get()} Clicks`
 
 
@@ -84,6 +109,9 @@ function load_game() {
     auto_clicker_cost.innerHTML = `AutoClicker Cost: ${getAutoClickerPrice()} Clicks`
     gameLoop();
     setInterval(gameLoop, 1000)
+    title = document.createElement("h")
+    title.innerHTML = "Click you fucking whore"
+    game.appendChild(title)
     game.appendChild(clicks)
     game.appendChild(auto_clickers)
     game.appendChild(click_button)
