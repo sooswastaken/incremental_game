@@ -107,7 +107,7 @@ function load_game() {
     auto_clicker_cost.innerHTML = `AutoClicker Cost: ${getAutoClickerPrice()} Clicks`
     gameLoop();
     setInterval(gameLoop, 1000)
-    title = document.createElement("h")
+    title = document.createElement("h1")
     title.innerHTML = "Click you fucking whore"
     game.appendChild(title)
     game.appendChild(clicks)
