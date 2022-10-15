@@ -74,9 +74,7 @@ const AUTO_CLICKERS = {
         for(let i=0; i<x.length; i++) {
             let item = x[i].toString()
             let b = Date.parse(item)
-            console.log(b)
             let elapsed_time = Math.round((new Date() - b) / 1000)
-            console.log(elapsed_time)
             CLICKS.set(CLICKS.get() + elapsed_time)
             x[i] = new Date()
         }
